@@ -21,7 +21,6 @@
 // ========== Copyright Header End ============================================
 // The cluster header is instatiated as a hard macro.
 // This model is for simulation only.
-`include "sys.h"
 
 module cluster_header (/*AUTOARG*/
    // Outputs
