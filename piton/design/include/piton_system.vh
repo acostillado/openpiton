@@ -164,6 +164,6 @@
 `ifdef INTEL_S10GX_BOARD
     `undef PITON_CHIPSET_CLKS_GEN
     `undef PITONSYS_SPI
-    `define PITONSYS_UART
+    `undef PITONSYS_UART
     `define PITONSYS_NO_MC
 `endif // ifdef INTEL_S10GX_BOARD

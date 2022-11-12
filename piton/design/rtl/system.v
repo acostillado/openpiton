@@ -142,7 +142,10 @@ module system(
     input sys_clk,
 `endif
 
-    input                                       sys_rst_n,
+    input                                       sys_rst_n
+`ifndef INTEL_S10GX_BOARD
+,
+`endif
 
 `ifndef PITON_FPGA_SYNTH
     input                                       pll_rst_n,
@@ -176,6 +179,7 @@ module system(
 
 `ifdef PITON_FPGA_SYNTH
 `ifdef PITON_ARIANE
+`ifndef INTEL_S10GX_BOARD
 `ifndef VC707_BOARD
 `ifndef VCU118_BOARD
 `ifndef NEXYSVIDEO_BOARD
@@ -191,6 +195,7 @@ module system(
 `endif //NEXYSVIDEO_BOARD
 `endif //VCU118_BOARD
 `endif  //VC707_BOARD
+`endif // ifndef INTEL_S10GX_BOARD
 `endif //PITON_ARIANE
 `endif //PITON_FPGA_SYNTH
 
@@ -304,7 +309,10 @@ module system(
 `ifdef PITONSYS_IOCTRL
 `ifdef PITONSYS_UART
     output                                      uart_tx,
-    input                                       uart_rx,
+    input                                       uart_rx
+`ifndef INTEL_S10GX_BOARD
+,
+`endif
 `ifdef VCU118_BOARD
 		input                                       uart_cts,
 		output                                      uart_rts,
@@ -381,6 +389,8 @@ module system(
     input                                       btnc,
 `endif
 
+`ifndef INTEL_S10GX_BOARD
+
 `ifdef VCU118_BOARD
     // we only have 4 gpio dip switches on this board
     input  [3:0]                                sw,
@@ -395,6 +405,8 @@ module system(
 `else 
     output [7:0]                                leds
 `endif
+
+`endif // ifndef INTEL_S10GX_BOARD
 );
 
 ///////////////////////

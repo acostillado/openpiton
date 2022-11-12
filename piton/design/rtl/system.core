@@ -12,6 +12,11 @@ filesets:
             - tool_vivado? (openpiton::xilinx_system_constraints)
         file_type: verilogSource-2001
 
+    s10gx:
+        files:
+            - ../intel/s10gx/system.tcl : {file_type : tclSource}
+            - ../intel/s10gx/system.sdc : {file_type : SDC}
+
 targets:
     default:
         filesets: [rtl]
@@ -118,7 +123,7 @@ targets:
     s10gx:
         default_tool: quartus
         description: Intel Stratix 10 GX Development Kit
-        filesets: [rtl]
+        filesets: [rtl, s10gx]
         toplevel: [system]
         tools:
           quartus:
