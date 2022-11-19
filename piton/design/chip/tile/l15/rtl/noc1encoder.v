@@ -273,7 +273,11 @@ begin
    msg_src_ypos = coreid_y;
    msg_src_chipid = chipid;
    msg_src_fbits = `NOC_FBITS_L1;
-   msg_dest_fbits = `NOC_FBITS_L2;
+   // Set fbits for on-chip device access according to the fbits field in addr
+   // For interrupt controller access, hard code the fbits. This is DECADES_CHIP specific. 
+   // otherwise set fbits to 0 (target L2)
+   msg_dest_fbits = (noc1buffer_noc1encoder_req_address[39:33] == 7'b1110000) ?
+                   noc1buffer_noc1encoder_req_address[`ON_CHIP_DEV_FBITS] : `NOC_FBITS_L2;
 
    // default value for a message, will be overwritten by interrupt reqs
    msg_dest_l2_xpos = req_dest_l2_xpos;
@@ -428,19 +432,7 @@ begin
    msg_options_2 = 0;
    msg_options_3 = 0;
 
-   case (msg_data_size)
-      `PCX_SZ_1B:
-         msg_options_2[`MSG_DATA_SIZE_] = `MSG_DATA_SIZE_1B;
-      `PCX_SZ_2B:
-         msg_options_2[`MSG_DATA_SIZE_] = `MSG_DATA_SIZE_2B;
-      `PCX_SZ_4B:
-         msg_options_2[`MSG_DATA_SIZE_] = `MSG_DATA_SIZE_4B;
-      `PCX_SZ_8B:
-         msg_options_2[`MSG_DATA_SIZE_] = `MSG_DATA_SIZE_8B;
-      `PCX_SZ_16B:
-         msg_options_2[`MSG_DATA_SIZE_] = `MSG_DATA_SIZE_16B;
-   endcase
-
+   msg_options_2[`MSG_DATA_SIZE_] = msg_data_size;
    msg_options_2[`MSG_CACHE_TYPE_] = msg_cache_type;
    msg_options_2[`MSG_SUBLINE_VECTOR_] = msg_subline_vector;
 

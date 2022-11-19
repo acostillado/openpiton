@@ -52,7 +52,7 @@ then
     echo "Please source ariane_setup.sh first, while being in the root folder."
 else
 
-  git submodule update --init --recursive
+  git submodule update --init --recursive piton/design/chip/tile/ariane
 
   # parallel compilation
   export NUM_JOBS=4
@@ -88,7 +88,12 @@ else
   cd -
 
   cd build
-  ../configure --prefix=$ROOT/tmp/riscv-tests/build
+  tmp_dest=$ARIANE_ROOT/tmp
+  if [ -w /tmp ]
+  then
+    tmp_dest=/tmp
+  fi
+  ../configure --prefix=$tmp_dest/riscv-tests/build
 
   make clean
   make isa        -j${NUM_JOBS} > /dev/null

@@ -54,9 +54,9 @@
 import pyhplib
 from pyhplib import *
 
-print "`define NUM_TILES %d" % NUM_TILES;
-print "`define X_TILES %d"   % X_TILES;
-print "`define Y_TILES %d"   % Y_TILES;
+print("`define PITON_NUM_TILES %d" % PITON_NUM_TILES)
+print("`define PITON_X_TILES %d"   % PITON_X_TILES)
+print("`define PITON_Y_TILES %d"   % PITON_Y_TILES)
 %>
 
 // NoC interface
@@ -114,11 +114,13 @@ print "`define Y_TILES %d"   % Y_TILES;
 `define MSG_DST_CHIPID          63:50
 `define MSG_DST_CHIPID_HI       63
 
+`define MSG_AMO_MASK0           71:64
 `define MSG_DATA_SIZE           74:72
 `define MSG_CACHE_TYPE          75
 `define MSG_SUBLINE_VECTOR      79:76
 `define MSG_ADDR                119:80
 
+`define MSG_AMO_MASK1           135:128
 `define MSG_LSID                147:142
 `define MSG_SDID                157:148
 `define MSG_SRC_FBITS           161:158
@@ -128,14 +130,17 @@ print "`define Y_TILES %d"   % Y_TILES;
 
 // these shifted fields are added for convienience
 // HEADER 2
+`define MSG_AMO_MASK0_           7:0
 `define MSG_DATA_SIZE_           10:8
 `define MSG_CACHE_TYPE_          11
 `define MSG_SUBLINE_VECTOR_      15:12
 `define MSG_OPTIONS_2_           15:0
-`define MSG_ADDR_HI_             55
-`define MSG_ADDR_                55:16
+`define MSG_ADDR_LO_             16
+`define MSG_ADDR_HI_             (`MSG_ADDR_LO_ + `PHY_ADDR_WIDTH - 1)
+`define MSG_ADDR_                (`MSG_ADDR_HI_):(`MSG_ADDR_LO_)
 
 // HEADER 3
+`define MSG_AMO_MASK1_           7:0
 `define MSG_LSID_                19:14 // 147-128:142-128
 `define MSG_SDID_                29:20
 `define MSG_OPTIONS_3_           29:0
@@ -154,6 +159,9 @@ print "`define Y_TILES %d"   % Y_TILES;
 `define MSG_DST_NODEID_WIDTH    `NOC_NODEID_WIDTH
 `define MSG_LENGTH_WIDTH        8
 `define MSG_OPTIONS_1_WIDTH     6
+`define MSG_OPTIONS_2_WIDTH     16
+`define MSG_OPTIONS_3_WIDTH     30
+`define MSG_OPTIONS_4_WIDTH     6
 
 // Width of MSG_ADDR field - you're probably looking for PHY_ADDR_WIDTH
 `define MSG_ADDR_WIDTH          48
@@ -220,6 +228,12 @@ print "`define Y_TILES %d"   % Y_TILES;
 
 `define MSG_TYPE_LR_REQ              8'd60
 
+// Load request without asking for the ownership
+`define MSG_TYPE_LOAD_NOSHARE_REQ    8'd61
+// SC3 writeback swap AMO
+`define MSG_TYPE_SWAPWB_REQ         8'd62
+`define MSG_TYPE_SWAPWB_P1_REQ      8'd63
+`define MSG_TYPE_SWAPWB_P2_REQ      8'd64
 
 //Forward requests from L2 to L15
 `define MSG_TYPE_LOAD_FWD           8'd16
@@ -308,69 +322,6 @@ print "`define Y_TILES %d"   % Y_TILES;
 `define MSG_DATA_SIZE_32B       3'b110
 `define MSG_DATA_SIZE_64B       3'b111
 
-
-//`define HOME_ID_MASK_X          10:10
-//Additional fields for Sharer Domain ID and Logical Sharer ID
-//For coherence domain restriction only
-
-
-// Tri: dynamically adjust these parameters based on how many tiles are available
-//  Assumption: 8x8 topology
-`ifdef RTL_SPARC63
-`define HOME_ID_MASK_X          8:6
-`define HOME_ID_MASK_X_ENABLE   1
-`define HOME_ID_MASK_Y          11:9
-`define HOME_ID_MASK_Y_ENABLE   1
-`define TOTAL_NUM_TILE          64
-`else
-`ifdef RTL_SPARC31
-`define HOME_ID_MASK_X          8:6
-`define HOME_ID_MASK_X_ENABLE   1
-`define HOME_ID_MASK_Y          10:9
-`define HOME_ID_MASK_Y_ENABLE   1
-`define TOTAL_NUM_TILE          32
-`else
-`ifdef RTL_SPARC15
-`define HOME_ID_MASK_X          8:6
-`define HOME_ID_MASK_X_ENABLE   1
-`define HOME_ID_MASK_Y          9:9
-`define HOME_ID_MASK_Y_ENABLE   1
-`define TOTAL_NUM_TILE          16
-`else
-`ifdef RTL_SPARC7
-`define HOME_ID_MASK_X          8:6
-`define HOME_ID_MASK_X_ENABLE   1
-`define HOME_ID_MASK_Y          0:0
-`define HOME_ID_MASK_Y_ENABLE   0
-`define TOTAL_NUM_TILE          8
-`else
-`ifdef RTL_SPARC3
-`define HOME_ID_MASK_X          7:6
-`define HOME_ID_MASK_X_ENABLE   1
-`define HOME_ID_MASK_Y          0:0
-`define HOME_ID_MASK_Y_ENABLE   0
-`define TOTAL_NUM_TILE          4
-`else
-`ifdef RTL_SPARC1
-`define HOME_ID_MASK_X          6:6
-`define HOME_ID_MASK_X_ENABLE   1
-`define HOME_ID_MASK_Y          0:0
-`define HOME_ID_MASK_Y_ENABLE   0
-`define TOTAL_NUM_TILE          2
-`else
-`define HOME_ID_MASK_X          6:6
-`define HOME_ID_MASK_X_ENABLE   0
-`define HOME_ID_MASK_Y          0:0
-`define HOME_ID_MASK_Y_ENABLE   0
-`define TOTAL_NUM_TILE          1
-`endif
-`endif
-`endif
-`endif
-`endif
-`endif
-
-
 //`define DMBR_TAG_WIDTH 4
 
 //Clumpy Shared Memory
@@ -432,6 +383,10 @@ print "`define Y_TILES %d"   % Y_TILES;
 `define MSG_HDID_WIDTH          10
 `define MSG_LHID_WIDTH          6
 
+`define MSG_AMO_MASK0_WIDTH     8
+`define MSG_AMO_MASK1_WIDTH     8
+`define MSG_AMO_MASK_WIDTH      16
+
 
 `define TLB_CSM_WIDTH           33
 `define TLB_CSM                 32:0
@@ -488,10 +443,16 @@ print "`define Y_TILES %d"   % Y_TILES;
 `define HOME_ID_ADDR_POS_LOW        `HOME_ID_WIDTH+5 : 6
 `define HOME_ID_ADDR_POS_MIDDLE     `HOME_ID_WIDTH+13 : 14
 `define HOME_ID_ADDR_POS_HIGH       `HOME_ID_WIDTH+23 : 24
-`define HOME_ID_X_POS_WIDTH         3
-`define HOME_ID_X_POS               2:0
-`define HOME_ID_Y_POS_WIDTH         3
-`define HOME_ID_Y_POS               5:3
+//`define HOME_ID_X_POS_WIDTH         3
+//`define HOME_ID_X_POS               2:0
+//`define HOME_ID_Y_POS_WIDTH         3
+//`define HOME_ID_Y_POS               5:3
+
+// For the on-chip device access requests(addr starts with 0xe), 
+ // address has specific fields for x, y, and fbits
+ `define ON_CHIP_DEV_X_POS       31:28
+ `define ON_CHIP_DEV_Y_POS       27:24
+ `define ON_CHIP_DEV_FBITS       23:20
 
 // Packet format for home id
 `define PACKET_HOME_ID_WIDTH        (`NOC_CHIPID_WIDTH+`NOC_X_WIDTH+`NOC_Y_WIDTH)

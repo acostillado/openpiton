@@ -155,17 +155,6 @@ begin
 
     address = l15_noc3encoder_req_address;
 
-    // old non-csm implementation
-    // if (`HOME_ID_MASK_X_ENABLE)
-    //     dest_l2_xpos = l15_noc3encoder_req_address[`HOME_ID_MASK_X];
-    // else
-    //     dest_l2_xpos = 0;
-    // if (`HOME_ID_MASK_Y_ENABLE)
-    //     dest_l2_ypos = l15_noc3encoder_req_address[`HOME_ID_MASK_Y];
-    // else
-    //     dest_l2_ypos = 0;
-    // dest_chipid = 0;
-
     dest_l2_xpos = l15_noc3encoder_req_homeid[`PACKET_HOME_ID_X_MASK];
     dest_l2_ypos = l15_noc3encoder_req_homeid[`PACKET_HOME_ID_Y_MASK];
     dest_chipid = l15_noc3encoder_req_homeid[`PACKET_HOME_ID_CHIP_MASK];
@@ -238,10 +227,7 @@ begin
     msg_options_4 = 0;
 
     // trin: line coverage: 16B transaction apparently does not happen with the T1 core
-    if (msg_data_size == `PCX_SZ_16B)
-        msg_options_2[`MSG_DATA_SIZE_] = `MSG_DATA_SIZE_16B;
-    else
-        msg_options_2[`MSG_DATA_SIZE_] = msg_data_size;
+    msg_options_2[`MSG_DATA_SIZE_] = msg_data_size;
     msg_options_2[`MSG_CACHE_TYPE_] = msg_cache_type;
     msg_options_2[`MSG_SUBLINE_VECTOR_] = msg_subline_vector;
 
@@ -270,11 +256,6 @@ begin
         begin
             flit[`MSG_ADDR_] = address;
             flit[`MSG_OPTIONS_2_] = msg_options_2;
-            // trin: line coverage: 16B transaction apparently does not happen with the T1 core
-            if (msg_data_size == `PCX_SZ_16B)
-                flit[`MSG_DATA_SIZE_] = `MSG_DATA_SIZE_16B;
-            else
-                flit[`MSG_DATA_SIZE_] = msg_data_size;
         end
         else if (flit_state == `NOC3_REQ_HEADER_3)
         begin

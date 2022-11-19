@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/env python3
 # Copyright 2019 ETH Zurich and University of Bologna.
 # Copyright and related rights are licensed under the Solderpad Hardware
 # License, Version 0.51 (the "License"); you may not use this file except in
@@ -18,12 +18,14 @@ import pyhplib
 import os
 import subprocess
 from pyhplib import *
+import time
 
 # this prints some system information, to be printed by the bootrom at power-on
 def get_bootrom_info(devices, nCpus, cpuFreq, timeBaseFreq, periphFreq, dtsPath, timeStamp):
 
-    piton_ver  = subprocess.check_output(["git log | grep commit -m1 | awk -e '{print $2;}'"], shell=True)
-    ariane_ver = subprocess.check_output(["cd  %s && git log | grep commit -m1 | awk -e '{print $2;}'" % dtsPath], shell=True)
+    gitver_cmd = "git log | grep commit -m1 | LD_LIBRARY_PATH= awk -e '{print $2;}'"
+    piton_ver  = subprocess.check_output([gitver_cmd], shell=True)
+    ariane_ver = subprocess.check_output(["cd %s && %s" % (os.environ['ARIANE_ROOT'], gitver_cmd)], shell=True)
 
     # get length of memory
     memLen  = 0
@@ -78,11 +80,11 @@ const char info[] = {
        ariane_ver[0:8],
        boardName,
        timeStamp,
-       int(os.environ['PTON_X_TILES']),
-       int(os.environ['PTON_Y_TILES']),
-       int(os.environ['PTON_NUM_TILES']),
+       int(os.environ['PITON_X_TILES']),
+       int(os.environ['PITON_Y_TILES']),
+       int(os.environ['PITON_NUM_TILES']),
        sysFreq,
-       os.environ['PTON_NETWORK_CONFIG'],
+       os.environ['PITON_NETWORK_CONFIG'],
        int(memLen/1024/1024),
        int(os.environ['CONFIG_L1I_SIZE'])/1024,
        int(os.environ['CONFIG_L1I_ASSOCIATIVITY']),
@@ -141,11 +143,9 @@ def gen_riscv_dts(devices, nCpus, cpuFreq, timeBaseFreq, periphFreq, dtsPath, ti
     #size-cells = <2>;
     compatible = "eth,ariane-bare-dev";
     model = "eth,ariane-bare";
-    // TODO: interrupt-based UART is currently very slow
-    // with this configuration. this needs to be fixed.
-    // chosen {
-    //     stdout-path = "/soc/uart@%08x:115200";
-    // };
+    chosen {
+        stdout-path = "/soc/uart@%08x:115200";
+    };
     cpus {
         #address-cells = <1>;
         #size-cells = <0>;
@@ -243,21 +243,6 @@ def gen_riscv_dts(devices, nCpus, cpuFreq, timeBaseFreq, periphFreq, dtsPath, ti
             riscv,ndev = <%d>;
         };
             ''' % (_reg_fmt(addrBase, addrLen, 2, 2), numIrqs)
-        # DTM
-        if devices[i]["name"] == "ariane_debug":
-            addrBase = devices[i]["base"]
-            addrLen  = devices[i]["length"]
-            tmpStr += '''
-        debug-controller@%08x {
-            compatible = "riscv,debug-013";
-            interrupts-extended = <''' % (addrBase)
-            for k in range(nCpus):
-                tmpStr += "&CPU%d_intc 65535 " % (k)
-            tmpStr += '''>;
-            reg = <%s>;
-            reg-names = "control";
-        };
-            ''' % (_reg_fmt(addrBase, addrLen, 2, 2))
         # UART
         if devices[i]["name"] == "uart":
             addrBase = devices[i]["base"]
@@ -270,7 +255,7 @@ def gen_riscv_dts(devices, nCpus, cpuFreq, timeBaseFreq, periphFreq, dtsPath, ti
             current-speed = <115200>;
             interrupt-parent = <&PLIC0>;
             interrupts = <%d>;
-            reg-shift = <2>; // regs are spaced on 32 bit boundary
+            reg-shift = <0>; // regs are spaced on 8 bit boundary (modified from Xilinx UART16550 to be ns16550 compatible)
         };
             ''' % (addrBase, _reg_fmt(addrBase, addrLen, 2, 2), periphFreq, ioDeviceNr)
             ioDeviceNr+=1
@@ -326,7 +311,20 @@ def gen_riscv_dts(devices, nCpus, cpuFreq, timeBaseFreq, periphFreq, dtsPath, ti
     # this needs to match
     assert ioDeviceNr-1 == numIrqs
 
-    with open(dtsPath + '/ariane.dts','w') as file:
+    with open(dtsPath + '/rv64_platform.dts','w') as file:
         file.write(tmpStr)
 
+def main():
+    devices = pyhplib.ReadDevicesXMLFile()
 
+    # just use a default frequency for device tree generation if not defined
+    sysFreq = 50000000
+    if 'CONFIG_SYS_FREQ' in os.environ:
+        sysFreq = int(os.environ['CONFIG_SYS_FREQ'])
+
+    timeStamp = time.strftime("%b %d %Y %H:%M:%S", time.localtime())
+    gen_riscv_dts(devices, PITON_NUM_TILES, sysFreq, sysFreq/128, sysFreq, os.environ['DV_ROOT']+"/design/chipset/rv64_platform/bootrom/", timeStamp)
+    get_bootrom_info(devices, PITON_NUM_TILES, sysFreq, sysFreq/128, sysFreq, os.environ['DV_ROOT']+"/design/chipset/rv64_platform/bootrom/", timeStamp)
+
+if __name__ == "__main__":
+    main()
