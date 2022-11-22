@@ -1,4 +1,3 @@
     -vcs_build_args=-V
     -vcs_build_args=-lm
     -vcs_build_args=-lc
-    -vcs_build_args=-lnsl

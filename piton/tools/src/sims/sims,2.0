@@ -201,6 +201,7 @@ Getopt::Long::Configure ('no_auto_abbrev') ;
         'rv64_mabi=s' => "",
         'rv64_march=s' => "",
         'rv64_target_triple=s' => "",
+        'rv64_platform' => 0,
         'other_sim_build' => 0,
         'sim_build_args' => [],
         'other_sim_build_cmd' => "",
@@ -342,6 +343,7 @@ GetOptions (\%opt,
             'sparcv9!',
             'rv32!',
             'rv64!',
+            'rv64_platform!',
             'regress!',
             'regress_id=s',
             'report!',
@@ -1891,7 +1893,7 @@ sub assemble_diag
     `rm -rf diag.pal diag.s diag.S diag.pl diag.exe mem.image diag.ev symbol.tbl` ;
     die "DIE. could not clean up assembly diag run area"  if ($?) ;
 
-    # add default path to look for precompiled RISCV 64bit assembly tests diags in case of ariane
+    # add default path to look for precompiled RISCV 64bit assembly tests diags
     if ($opt{ariane} and $opt{precompiled}) {
       push @{$opt{asm_diag_root}}, "$ENV{ARIANE_ROOT}/tmp/riscv-tests/build/isa";
       push @{$opt{asm_diag_root}}, "$ENV{ARIANE_ROOT}/tmp/riscv-tests/build/benchmarks";
@@ -2280,6 +2282,7 @@ sub parse_args
             'rv64_mabi=s',
             'rv64_march=s',
             'rv64_target_triple=s',
+            'rv64_platform!',
             'other_sim_build!',
             'sim_build_args=s@',
             'other_sim_build_cmd=s',
@@ -2400,21 +2403,7 @@ sub parse_args
     else { die ("DIE. Unprocessed argument: $x") ; }
   }
 
-  # Set ISA to choose compilation flow based on ISA
-  if ($opt{ost1}) {
-    $opt{sparcv9} = 1 ;
-    print "$prg: Building/running for sparcv9\n" ;
-  }
-  if ($opt{pico}) {
-    $opt{rv32} = 1 ;
-    print "$prg: Building/running for rv32\n" ;
-  }
-  if ($opt{ariane}) {
-    $opt{rv64} = 1 ;
-    print "$prg: Building/running for rv64\n" ;
-  }
-
-  # in case a precompiled riscv binary for ariane is directly specified
+  # in case a precompiled riscv binary is directly specified
   if ($opt{precompiled} and ($opt{rv32} | $opt{rv64})) {
     if (!($opt{asm_diag_name} =~ /\.riscv/)) {
         $opt{asm_diag_name} = fileparse($opt{asm_diag_name}, qr/\.[^.]*/);
@@ -2472,6 +2461,7 @@ sub parse_args
   $ENV{PITON_PICO}     = $opt{pico};
   $ENV{PITON_PICO_HET} = $opt{pico_het};
   $ENV{PITON_ARIANE}   = $opt{ariane};
+  $ENV{PITON_RV64_PLATFORM}   = "1" if ($opt{rv64_platform});
 
   my $pton_x_tiles="";
   my $pton_y_tiles="";
@@ -2767,7 +2757,7 @@ VERILOG COMPILATION RELATED
            in this case, programs are compiled and assembled using midas
 
     -pico
-           this specifies that the PICORV32 core shall be used instead of OpenSPARC.
+           this specifies that the PICORV32 core shall be used
            in this case, programs are compiled and assembled using the RISCV GCC toolchain.
 
     -pico_het
@@ -2775,7 +2765,7 @@ VERILOG COMPILATION RELATED
            where every odd core is a PICORV32 core (along the x-dimension).
 
     -ariane
-           this specifies that the ARIANE RV64GC core shall be used instead of OpenSPARC.
+           this specifies that the ARIANE RV64GC core shall be used
            in this case, programs are compiled and assembled using the RISCV GCC toolchain.
 
 VERILOG RUNTIME RELATED
@@ -2831,7 +2821,7 @@ midas is the diag assembler
 
 RISCV GCC
 
-this is the compiler used for RISC-V cores (e.g., when the -pico or -ariane switches are specified).
+this is the compiler used for RISC-V cores
 
     -uart_dmw
            use this switch when compiling code for Pitonstream. this will add load
@@ -2840,7 +2830,7 @@ this is the compiler used for RISC-V cores (e.g., when the -pico or -ariane swit
 
     -precompiled
            specify this in order to use pre-built assembly tests and benchmarks from the RISC-V toolchain folder.
-           this basically adds the two search paths
+           combined with -ariane, this basically adds the two search paths
              $ENV{ARIANE_ROOT}/tmp/riscv-tests/build/isa
              $ENV{ARIANE_ROOT}/tmp/riscv-tests/build/benchmarks
            to @{$opt{asm_diag_root}}, and skips the compilation step.

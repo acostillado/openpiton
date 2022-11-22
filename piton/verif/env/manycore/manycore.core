@@ -99,6 +99,10 @@ targets:
             - pico_het? (PITON_PICO=true)
             - pico_het? (PITON_PICO_HET=true)
             - ariane? (PITON_ARIANE=true)
+            - ariane? (PITON_RV64_PLATFORM=true)
+            - ariane? (PITON_RV64_DEBUGUNIT=true)
+            - ariane? (PITON_RV64_CLINT=true)
+            - ariane? (PITON_RV64_PLIC=true)
             - ariane? (WT_DCACHE=true)
             - tool_xcelium? (PITON_DPI=true)
             - tool_verilator? (PITON_DPI=true)
@@ -149,6 +153,18 @@ parameters:
         datatype: bool
         paramtype: vlogdefine
     PITON_ARIANE:
+        datatype: bool
+        paramtype: vlogdefine
+    PITON_RV64_PLATFORM:
+        datatype: bool
+        paramtype: vlogdefine
+    PITON_RV64_DEBUGUNIT:
+        datatype: bool
+        paramtype: vlogdefine
+    PITON_RV64_PLIC:
+        datatype: bool
+        paramtype: vlogdefine
+    PITON_RV64_CLINT:
         datatype: bool
         paramtype: vlogdefine
     WT_DCACHE:
