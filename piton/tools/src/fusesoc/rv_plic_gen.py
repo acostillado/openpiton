@@ -60,7 +60,7 @@ if __name__ == "__main__":
     # Run PyHP for each input/output pair 
     rtl_files = ""
     # Process bare metal bootrom
-    cmd_path = os.path.join(os.environ["ARIANE_ROOT"], "src/rv_plic/rtl")
+    cmd_path = os.path.join(os.environ["ARIANE_ROOT"], "corev_apu/rv_plic/rtl")
 
     num_sources = 2
     num_targets = 2 * int(os.environ["PITON_NUM_TILES"])

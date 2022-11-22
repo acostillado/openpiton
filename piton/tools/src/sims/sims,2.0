@@ -369,6 +369,9 @@ push (@{$opt{fusesoc_useflags}}, "--flag=ost1")     if ($opt{ost1} || $opt{pico_
 push (@{$opt{fusesoc_useflags}}, "--flag=pico")     if ($opt{pico} || $opt{pico_het}) ;
 push (@{$opt{fusesoc_useflags}}, "--flag=ariane")   if ($opt{ariane}) ;
 push (@{$opt{fusesoc_useflags}}, "--flag=oram")     if ($opt{oram}) ;
+$opt{rv32} = 1 if ($opt{pico}) ;
+$opt{sparcv9} = 1 if ($opt{ost1}) ;
+$opt{rv64} = 1 if ($opt{ariane}) ;
 
 ################################################################################
 # define $result_dir
@@ -2461,7 +2464,7 @@ sub parse_args
   $ENV{PITON_PICO}     = $opt{pico};
   $ENV{PITON_PICO_HET} = $opt{pico_het};
   $ENV{PITON_ARIANE}   = $opt{ariane};
-  $ENV{PITON_RV64_PLATFORM}   = "1" if ($opt{rv64_platform});
+  $ENV{PITON_RV64_PLATFORM}   = $opt{ariane};
 
   my $pton_x_tiles="";
   my $pton_y_tiles="";

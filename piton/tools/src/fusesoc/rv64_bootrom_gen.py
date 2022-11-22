@@ -65,7 +65,7 @@ if __name__ == "__main__":
     # Run PyHP for each input/output pair 
     rtl_files = ""
     # Process bare metal bootrom
-    cmd_path = os.path.join(os.environ["ARIANE_ROOT"], "openpiton/bootrom/baremetal")
+    cmd_path = os.path.join(os.environ["PITON_ROOT"], "piton/design/chipset/rv64_platform//bootrom/baremetal")
     
     try:
         subprocess.check_call("make clean && make all",
@@ -83,7 +83,7 @@ if __name__ == "__main__":
     rtl_files += rtl_file_template_v_file.replace("__RTL_FILE_TEMPLATE__", "bootrom.sv")
 
     # Process linux bootrom
-    cmd_path = os.path.join(os.environ["ARIANE_ROOT"], "openpiton/bootrom/linux")
+    cmd_path = os.path.join(os.environ["PITON_ROOT"], "piton/design/chipset/rv64_platform/bootrom/linux")
     
     try:
         subprocess.check_call("make clean && make all MAX_HARTS={}".format(os.environ["PITON_NUM_TILES"]),
