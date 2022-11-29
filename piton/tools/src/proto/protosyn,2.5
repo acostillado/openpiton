@@ -517,7 +517,8 @@ def makeDefList(options):
     if (options.test_name != None) or (options.board in {"piton_board", 'xupp3r', "f1"}):
         pass
     else:   # default option
-        defines.append("PITON_FPGA_SD_BOOT")
+        if (options.board != "nexys4ddr"):
+            defines.append("PITON_FPGA_SD_BOOT")
 
     # --bram-test option
     if options.test_name != None:
@@ -605,6 +606,12 @@ def makeDefList(options):
     elif options.design == "chipset" and (options.board == "genesys2" or options.board == "nexysVideo"):
         disp_string = "Heeey!          I am a chipset  for (Open)Piton Enjoy debugging!"
         defines.append("{OLED_STRING=\\\"%s\\\"}" % disp_string)
+
+    if options.board == "nexys4ddr":
+        defines.append("NO_RTL_CSM")
+        defines.append("THREADS_1")
+        defines.append("FPGA_SYN_8TLB")
+        defines.append("PITON_FPGA_NO_FPU")
 
     return defines
 
@@ -848,7 +855,7 @@ def main():
 
         print_info("Synthesizing a test: %s" % options.test_name)
         print_info("Compilation started")
-        ret_val = os.system('sims -sys=manycore' + config + ' -vcs_build -vcs_build_args=+libext+.v -vcs_build_args=-Mupdate > %s/compilation.log' % rc_dir.log)
+        ret_val = os.system('sims -sys=manycore' + config + ' -vcs_build -vcs_build_args=+libext+.v -vcs_build_args=-Mupdate -vcs_build_args="-LDFLAGS -Wl,--no-as-needed" > %s/compilation.log' % rc_dir.log)
         if ret_val != 0:
             print_error("Compilation didn't finish successfully!")
             print_info("See for Errors in %s/compilation.log" % rc_dir.log)
