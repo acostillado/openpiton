@@ -25,5 +25,5 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to sw[1]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to sw[2]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to sw[3]
 
-set_instance_assignment -name IO_STANDARD "1.8 V" -to cpu_uart_rx
-set_instance_assignment -name IO_STANDARD "1.8 V" -to cpu_uart_tx
+set_instance_assignment -name IO_STANDARD "1.8 V" -to uart_rx
+set_instance_assignment -name IO_STANDARD "1.8 V" -to uart_tx
