@@ -16,6 +16,13 @@ filesets:
         files:
             - ../intel/s10gx/system.tcl : {file_type : tclSource}
             - ../intel/s10gx/system.sdc : {file_type : SDC}
+            - ../intel/s10gx/uart/uart.qsys : {file_type : QSYS}
+#            - ../intel/s10gx/uart/ip/uart/uart_a_16550_uart_0.ip : {file_type : IP}
+#            - ../intel/s10gx/uart/ip/uart/uart_axi_bridge_0.ip : {file_type : IP}
+#            - ../intel/s10gx/uart/ip/uart/uart_clock_in.ip : {file_type : IP}
+#            - ../intel/s10gx/uart/ip/uart/uart_reset_in.ip : {file_type : IP}
+#        depend:
+#            - openpiton::inteluart
 
 targets:
     default:

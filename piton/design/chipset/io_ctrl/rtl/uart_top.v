@@ -473,6 +473,7 @@ uart_mux   uart_mux (
       assign s_axi_wready = 1'b1;
       assign s_axi_arready = 1'b1;
     `else
+      `ifndef INTEL_S10GX_BOARD
       uart_16550   uart_16550 (
         .s_axi_aclk       (axi_clk          ),  // input wire s_axi_aclk
         .s_axi_aresetn    (rst_n            ),  // input wire s_axi_aresetn
@@ -521,6 +522,42 @@ uart_mux   uart_mux (
         .sout             (uart16550_tx),  
         .txrdyn           ()    
       );
+      `else // ifdef INTEL_S10GX_BOARD
+	uart u0 (
+		.a_16550_uart_0_irq_sender_irq        (uart_interrupt),        //  output,   width = 1,    a_16550_uart_0_irq_sender.irq
+		.a_16550_uart_0_rs_232_serial_sin     (uart16550_rx),     //   input,   width = 1, a_16550_uart_0_rs_232_serial.sin
+		.a_16550_uart_0_rs_232_serial_sout    (uart16550_tx),    //  output,   width = 1,                             .sout
+		.a_16550_uart_0_rs_232_serial_sout_oe (), //  output,   width = 1,                             .sout_oe
+		.a_16550_uart_0_rs_232_modem_cts_n    (1'b0),    //   input,   width = 1,  a_16550_uart_0_rs_232_modem.cts_n
+		.a_16550_uart_0_rs_232_modem_rts_n    (),    //  output,   width = 1,                             .rts_n
+		.a_16550_uart_0_rs_232_modem_dsr_n    (1'b0),    //   input,   width = 1,                             .dsr_n
+		.a_16550_uart_0_rs_232_modem_dcd_n    (1'b0),    //   input,   width = 1,                             .dcd_n
+		.a_16550_uart_0_rs_232_modem_ri_n     (1'b0),     //   input,   width = 1,                             .ri_n
+		.a_16550_uart_0_rs_232_modem_dtr_n    (),    //  output,   width = 1,                             .dtr_n
+		.a_16550_uart_0_rs_232_modem_out1_n   (),   //  output,   width = 1,                             .out1_n
+		.a_16550_uart_0_rs_232_modem_out2_n   (),   //  output,   width = 1,                             .out2_n
+		.axi_bridge_0_s0_awaddr               (s_axi_awaddr ),               //   input,  width = 12,              axi_bridge_0_s0.awaddr
+		.axi_bridge_0_s0_awvalid              (s_axi_awvalid),              //   input,   width = 1,                             .awvalid
+		.axi_bridge_0_s0_awready              (s_axi_awready),              //  output,   width = 1,                             .awready
+		.axi_bridge_0_s0_wdata                (s_axi_wdata  ),                //   input,  width = 32,                             .wdata
+		.axi_bridge_0_s0_wstrb                (s_axi_wstrb  ),                //   input,   width = 4,                             .wstrb
+		.axi_bridge_0_s0_wvalid               (s_axi_wvalid ),               //   input,   width = 1,                             .wvalid
+		.axi_bridge_0_s0_wready               (s_axi_wready ),               //  output,   width = 1,                             .wready
+		.axi_bridge_0_s0_bresp                (s_axi_bresp  ),                //  output,   width = 2,                             .bresp
+		.axi_bridge_0_s0_bvalid               (s_axi_bvalid ),               //  output,   width = 1,                             .bvalid
+		.axi_bridge_0_s0_bready               (s_axi_bready ),               //   input,   width = 1,                             .bready
+		.axi_bridge_0_s0_araddr               (s_axi_araddr ),               //   input,  width = 12,                             .araddr
+		.axi_bridge_0_s0_arvalid              (s_axi_arvalid),              //   input,   width = 1,                             .arvalid
+		.axi_bridge_0_s0_arready              (s_axi_arready),              //  output,   width = 1,                             .arready
+		.axi_bridge_0_s0_rdata                (s_axi_rdata  ),                //  output,  width = 32,                             .rdata
+		.axi_bridge_0_s0_rresp                (s_axi_rresp  ),                //  output,   width = 2,                             .rresp
+		.axi_bridge_0_s0_rvalid               (s_axi_rvalid ),               //  output,   width = 1,                             .rvalid
+		.axi_bridge_0_s0_rready               (s_axi_rready ),               //   input,   width = 1,                             .rready
+		.clk_clk                              (axi_clk),                              //   input,   width = 1,                          clk.clk
+		.reset_in_in_reset_reset              (~rst_n)               //   input,   width = 1,            reset_in_in_reset.reset
+	);
+
+      `endif // INTEL_S10GX_BOARD
     `endif  // PITON_FPGA_MC_SIM
   `endif  // PITON_UART16550
 `endif  // PITON_BOARD

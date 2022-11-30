@@ -142,10 +142,7 @@ module system(
     input sys_clk,
 `endif
 
-    input                                       sys_rst_n
-`ifndef INTEL_S10GX_BOARD
-,
-`endif
+    input                                       sys_rst_n,
 
 `ifndef PITON_FPGA_SYNTH
     input                                       pll_rst_n,
@@ -309,10 +306,7 @@ module system(
 `ifdef PITONSYS_IOCTRL
 `ifdef PITONSYS_UART
     output                                      uart_tx,
-    input                                       uart_rx
-`ifndef INTEL_S10GX_BOARD
-,
-`endif
+    input                                       uart_rx,
 `ifdef VCU118_BOARD
 		input                                       uart_cts,
 		output                                      uart_rts,
@@ -389,17 +383,20 @@ module system(
     input                                       btnc,
 `endif
 
-`ifndef INTEL_S10GX_BOARD
 
 `ifdef VCU118_BOARD
     // we only have 4 gpio dip switches on this board
     input  [3:0]                                sw,
+`elsif INTEL_S10GX_BOARD
+    // we only have 4 gpio dip switches on this board
+    input  [3:0]                                sw
 `elsif XUPP3R_BOARD
     // no switches :(
 `else
     input  [7:0]                                sw,
 `endif
 
+`ifndef INTEL_S10GX_BOARD
 `ifdef XUPP3R_BOARD
     output [3:0]                                leds
 `else 
