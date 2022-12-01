@@ -80,20 +80,20 @@ const char info[] = {
        ariane_ver[0:8],
        boardName,
        timeStamp,
-       int(os.environ['PITON_X_TILES']),
-       int(os.environ['PITON_Y_TILES']),
-       int(os.environ['PITON_NUM_TILES']),
+       int(PITON_X_TILES),
+       int(PITON_Y_TILES),
+       int(PITON_NUM_TILES),
        sysFreq,
-       os.environ['PITON_NETWORK_CONFIG'],
+       PITON_NETWORK_CONFIG,
        int(memLen/1024/1024),
-       int(os.environ['CONFIG_L1I_SIZE'])/1024,
-       int(os.environ['CONFIG_L1I_ASSOCIATIVITY']),
-       int(os.environ['CONFIG_L1D_SIZE'])/1024,
-       int(os.environ['CONFIG_L1D_ASSOCIATIVITY']),
-       int(os.environ['CONFIG_L15_SIZE'])/1024,
-       int(os.environ['CONFIG_L15_ASSOCIATIVITY']),
-       int(os.environ['CONFIG_L2_SIZE'] )/1024,
-       int(os.environ['CONFIG_L2_ASSOCIATIVITY'] ))
+       int(CONFIG_L1I_SIZE)/1024,
+       int(CONFIG_L1I_ASSOCIATIVITY),
+       int(CONFIG_L1D_SIZE)/1024,
+       int(CONFIG_L1D_ASSOCIATIVITY),
+       int(CONFIG_L15_SIZE)/1024,
+       int(CONFIG_L15_ASSOCIATIVITY),
+       int(CONFIG_L2_SIZE)/1024,
+       int(CONFIG_L2_ASSOCIATIVITY))
 
     with open(dtsPath + '/info.h','w') as file:
         file.write(tmpStr)
