@@ -16,13 +16,13 @@ filesets:
         files:
             - ../intel/s10gx/system.tcl : {file_type : tclSource}
             - ../intel/s10gx/system.sdc : {file_type : SDC}
-            - ../intel/s10gx/uart/uart.qsys : {file_type : QSYS}
-#            - ../intel/s10gx/uart/ip/uart/uart_a_16550_uart_0.ip : {file_type : IP}
-#            - ../intel/s10gx/uart/ip/uart/uart_axi_bridge_0.ip : {file_type : IP}
-#            - ../intel/s10gx/uart/ip/uart/uart_clock_in.ip : {file_type : IP}
-#            - ../intel/s10gx/uart/ip/uart/uart_reset_in.ip : {file_type : IP}
-#        depend:
-#            - openpiton::inteluart
+            - ../intel/s10gx/clk_mmcm.qsys : {file_type : QSYS}
+            - ../intel/s10gx/ip/clk_mmcm/clk_mmcm_clock_in.ip : {file_type : IP}
+            - ../intel/s10gx/uart.qsys : {file_type : QSYS}
+            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0.ip : {file_type : IP}
+            - ../intel/s10gx/ip/uart/uart_axi_bridge_0.ip : {file_type : IP}
+            - ../intel/s10gx/ip/uart/uart_clock_in.ip : {file_type : IP}
+            - ../intel/s10gx/ip/uart/uart_reset_in.ip : {file_type : IP}
 
 targets:
     default:
@@ -135,7 +135,7 @@ targets:
         tools:
           quartus:
             family : Stratix 10
-            device : 1SG280HU2F50E2VG
+            device : 1SG280LU2F50E2VG
         parameters:
             - NO_SCAN=true
             - FPGA_SYN=true
@@ -158,6 +158,9 @@ targets:
             - ariane? (NO_RTL_CSM=true)
             - PITON_NO_CHIP_BRIDGE=true
             - INTEL_S10GX_BOARD=true
+            - PITON_UART16550=true
+            - PITON_FPGA_BRAM_BOOT=true
+            - PITONSYS_NO_MC=true
 
 parameters:
     NO_SCAN:
@@ -218,7 +221,13 @@ parameters:
     NO_RTL_CSM:
         datatype: bool
         paramtype: vlogdefine
+    PITONSYS_NO_MC:
+        datatype: bool
+        paramtype: vlogdefine
     PITON_FPGA_MC_DDR3:
+        datatype: bool
+        paramtype: vlogdefine
+    PITON_FPGA_BRAM_BOOT:
         datatype: bool
         paramtype: vlogdefine
     PITONSYS_MEM_ZEROER:

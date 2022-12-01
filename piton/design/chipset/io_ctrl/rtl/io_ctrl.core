@@ -8,7 +8,6 @@ filesets:
             - bram_map.v
             - ciop_iob.v
             - eth_top.v
-            - fake_boot_ctrl.v
             - net_int_sync.v
             - uart_mux.v
             - uart_reader.v
@@ -21,6 +20,7 @@ filesets:
 targets:
     default:
         filesets: [rtl]
+        generate: [pyhp_preprocess]
     pickle:
         default_tool: icarus
         filesets: [rtl]
@@ -33,3 +33,9 @@ targets:
         tools:
             icarus:
                 iverilog_options: [-g 2001]
+
+generate:
+    pyhp_preprocess:
+        generator: pyhp_preprocess_gen
+        parameters:
+            process_me : [[fake_boot_ctrl.v.pyv, fake_boot_ctrl.tmp.v]]

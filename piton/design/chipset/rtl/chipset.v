@@ -855,6 +855,7 @@ end
 
     assign chipset_clk = passthru_chipset_clk;
 `else
+    `ifndef INTEL_S10GX_BOARD
     `ifndef F1_BOARD
         `ifdef PITON_CHIPSET_CLKS_GEN
             clk_mmcm    clk_mmcm    (
@@ -902,6 +903,14 @@ end
         assign clk_locked = 1'b1;
         assign chipset_clk = sys_clk;
     `endif //ifndef F1_BOARD
+    `else // ifdef INTEL_S10GX_BOARD
+	clk_mmcm u0 (
+		.clk_osc_clk     (clk_osc),     //   input,  width = 1,     clk_osc.clk
+		.chipset_clk_clk (chipset_clk)  //  output,  width = 1, chipset_clk.clk
+	);
+        assign clk_locked = 1'b1;
+        assign init_calib_complete = 1'b1;
+    `endif // INTEL_S10GX_BOARD
 `endif // PITON_BOARD
 
 // If we are using a passthru, we need to convert
