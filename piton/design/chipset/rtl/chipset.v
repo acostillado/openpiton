@@ -751,6 +751,9 @@ end
             `elsif XUPP3R_BOARD
                 assign uart_boot_en    = 1'b1;
                 assign uart_timeout_en = 1'b0;
+            `elsif INTEL_S10GX_BOARD
+                assign uart_boot_en    = 1'b0;
+                assign uart_timeout_en = 1'b0;
             `else 
                 assign uart_boot_en    = sw[7];
                 assign uart_timeout_en = sw[6];
