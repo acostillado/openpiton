@@ -164,9 +164,14 @@ wire                               core_axi_rready;
 (* DONT_TOUCH = "yes" *)wire    [`NOC_DATA_WIDTH-1:0]  core_axi_awaddr_unmasked;
 (* DONT_TOUCH = "yes" *)wire    [`NOC_DATA_WIDTH-1:0]  core_axi_araddr_unmasked;
 
-assign core_axi_awaddr = (core_axi_awaddr_unmasked[12:0] << 2)  | 13'h1000;
-assign core_axi_araddr = (core_axi_araddr_unmasked[12:0] << 2)  | 13'h1000;
-
+// Different UART registers maps
+`ifdef INTEL_S10GX_BOARD
+    assign core_axi_awaddr = (core_axi_awaddr_unmasked[12:0] << 2)  | 13'h0000;
+    assign core_axi_araddr = (core_axi_araddr_unmasked[12:0] << 2)  | 13'h0000;
+`else   
+    assign core_axi_awaddr = (core_axi_awaddr_unmasked[12:0] << 2)  | 13'h1000;
+    assign core_axi_araddr = (core_axi_araddr_unmasked[12:0] << 2)  | 13'h1000;
+`endif
 assign uart_xbar_noc3_ready = 1'b1;
 
 noc_axilite_bridge #(
