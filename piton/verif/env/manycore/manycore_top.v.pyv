@@ -59,6 +59,11 @@ input                                 ok_iob
 `endif
 );
 
+//initial begin
+//$dumpfile("cmp_top.vcd");
+//$dumpvars;
+//end
+
 //////////////////////
 // Type Declarations
 //////////////////////
@@ -236,7 +241,7 @@ begin
     pll_rst_n = 1'b1;
 
     // Wait for PLL lock
-    wait( pll_lock == 1'b1 );
+    //wait( pll_lock == 1'b1 );
 
     // After 10 cycles turn on chip-level clock enable
     repeat(10)@(posedge `CHIP_INT_CLK);
@@ -270,6 +275,8 @@ end
 // SYNTHESIZABLE SYSTEM
 // INCLUDES CHIP + CHIPSET (AND OPTIONAL PASSTHRU)
 ///////////////////////////////////////////////////////
+
+wire tx;
 
 system system(
 `ifndef PITON_FPGA_SYNTH
@@ -389,8 +396,8 @@ system system(
     // UART interface for bootloading and
     // serial port interface.  Currently
     // not supported in simulation
-    .uart_tx(),
-    .uart_rx(),
+    .uart_tx(tx),
+    .uart_rx(1'b1),
 `endif // endif PITONSYS_UART
 
 `ifdef PITONSYS_SPI
@@ -407,11 +414,11 @@ system system(
 `ifdef PITON_NOC_POWER_CHIPSET_TEST
     .sw({4'bz, 4'd`PITON_NOC_POWER_CHIPSET_TEST_HOP_COUNT}),
 `else // ifndef PITON_NOC_POWER_CHIPSET_TEST
-    .sw(),
+    .sw()
 `endif // endif PITON_NOC_POWER_CHIPSET_TEST
 
     // Do not provide any functionality
-    .leds()
+//    .leds()
 );
 
 ////////////////////////////////////////////////////////
@@ -515,9 +522,9 @@ system system(
         .clk (jtag_clk)
         );
 
-    iob_mon iob_mon(
-        .clk (chipset_clk)
-    );
+//    iob_mon iob_mon(
+//        .clk (chipset_clk)
+//    );
     // sas, more debug info
 
     // turn on sas interface after a delay
@@ -556,14 +563,14 @@ system system(
 `endif // DISABLE_ALL_MONITORS
     // Alexey
     // UART monitor
-    /*reg      prev_tx_state;
+    reg      prev_tx_state;
     always @(posedge core_ref_clk)
         prev_tx_state <= tx;
 
     always @(posedge core_ref_clk)
         if (prev_tx_state != tx) begin
             $display("UART: TX changed to %d at", tx, $time);
-        end*/
+        end
 
 endmodule // cmp_top
 

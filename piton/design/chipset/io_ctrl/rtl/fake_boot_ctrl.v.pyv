@@ -374,7 +374,8 @@ fake_boot_bram bram (
     .RDWEN          (bram_rdwen     ),
     .BW             (bram_w_mask    ),
     .DIN            (bram_data_in   ),
-    .DOUT           (bram_data_out  )
+    .DOUT           (bram_data_out  ),
+    .RESET_N        (rst_n)
 );
 
 l2_encoder encoder(

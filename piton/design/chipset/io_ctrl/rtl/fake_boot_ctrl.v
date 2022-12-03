@@ -43,6 +43,19 @@
 
 `define MEM_ADDR_WIDTH      64
 
+<%
+  import pyhplib
+  from pyhplib import *
+
+  pyhplib.MakeGenericCacheDefine(
+    modulename="fake_boot_bram",
+    type="1r1w",
+    height_define="256",
+    heightlog2_define="8",
+    width_define="512"
+    );
+%>
+
 module fake_boot_ctrl(
 
     input wire clk,
@@ -354,13 +367,7 @@ assign bram_w_val_hit = bram_w_val & hit_bram_r;
 assign bram_ce      = bram_r_val_hit | bram_w_val_hit;
 assign bram_rdwen   = bram_r_val_hit;
 
-bram_sdp_wrapper #(
-    .NAME           ("bram_boot"                    ),
-    .DEPTH          (`PITON_BOOT_BRAM_DEPTH         ),
-    .ADDR_WIDTH     (`PITON_BOOT_BRAM_ADDR_WIDTH    ),
-    .BITMASK_WIDTH  (`PITON_BOOT_BRAM_DATA_WIDTH    ),
-    .DATA_WIDTH     (`PITON_BOOT_BRAM_DATA_WIDTH    )
-) bram (
+fake_boot_bram bram (
     .MEMCLK         (clk            ),
     .A              (bram_addr      ),
     .CE             (bram_ce        ),
