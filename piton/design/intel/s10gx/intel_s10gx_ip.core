@@ -1,0 +1,22 @@
+CAPI=2:
+name: openpiton::intel_s10gx_ip:0.1
+description: OpenPiton System
+
+filesets:
+    s10gx:
+        files:
+            - system.tcl : {file_type : tclSource}
+            - system.sdc : {file_type : SDC}
+            - clk_mmcm.qsys : {file_type : QSYS}
+            - ip/clk_mmcm/clk_mmcm_clock_in.ip : {file_type : IP}
+            - uart.qsys : {file_type : QSYS}
+            - ip/uart/uart_a_16550_uart_0.ip : {file_type : IP}
+            - ip/uart/uart_axi_bridge_0.ip : {file_type : IP}
+            - ip/uart/uart_clock_in.ip : {file_type : IP}
+            - ip/uart/uart_reset_in.ip : {file_type : IP}
+            - reset_release.qsys : {file_type : QSYS}
+            - ip/reset_release/reset_release_s10_user_rst_clkgate_0.ip : {file_type : IP}
+
+targets:
+    default:
+        filesets: [s10gx]
