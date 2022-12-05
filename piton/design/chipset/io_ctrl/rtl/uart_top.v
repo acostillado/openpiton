@@ -528,6 +528,18 @@ uart_mux   uart_mux (
         .txrdyn           ()    
       );
       `else // ifdef INTEL_S10GX_BOARD
+//integer file;
+//
+//initial begin
+//    file = $fopen("fake_uart.log", "w");
+//end
+//
+//always @(posedge axi_clk) begin
+//    if (s_axi_awvalid & s_axi_wvalid & (s_axi_awaddr[2:0] == 3'b0)) begin
+//        $fwrite(file, "%c", s_axi_wdata[7:0]);
+//        $fflush(file);
+//    end
+//end
 	uart u0 (
 		.a_16550_uart_0_irq_sender_irq        (uart_interrupt),        //  output,   width = 1,    a_16550_uart_0_irq_sender.irq
 		.a_16550_uart_0_rs_232_serial_sin     (uart16550_rx),     //   input,   width = 1, a_16550_uart_0_rs_232_serial.sin
@@ -544,7 +556,7 @@ uart_mux   uart_mux (
 		.axi_bridge_0_s0_awaddr               (s_axi_awaddr ),               //   input,  width = 12,              axi_bridge_0_s0.awaddr
 		.axi_bridge_0_s0_awvalid              (s_axi_awvalid),              //   input,   width = 1,                             .awvalid
 		.axi_bridge_0_s0_awready              (s_axi_awready),              //  output,   width = 1,                             .awready
-		.axi_bridge_0_s0_wdata                (s_axi_wdata  ),                //   input,  width = 32,                             .wdata
+		.axi_bridge_0_s0_wdata                ({{24{1'b0}},s_axi_wdata[7:0]}  ),                //   input,  width = 32,                             .wdata
 		.axi_bridge_0_s0_wstrb                (s_axi_wstrb  ),                //   input,   width = 4,                             .wstrb
 		.axi_bridge_0_s0_wvalid               (s_axi_wvalid ),               //   input,   width = 1,                             .wvalid
 		.axi_bridge_0_s0_wready               (s_axi_wready ),               //  output,   width = 1,                             .wready

@@ -397,7 +397,7 @@ system system(
     // serial port interface.  Currently
     // not supported in simulation
     .uart_tx(tx),
-    .uart_rx(1'b1),
+    .uart_rx(1'b0),
 `endif // endif PITONSYS_UART
 
 `ifdef PITONSYS_SPI
@@ -563,14 +563,14 @@ system system(
 `endif // DISABLE_ALL_MONITORS
     // Alexey
     // UART monitor
-    reg      prev_tx_state;
-    always @(posedge core_ref_clk)
-        prev_tx_state <= tx;
-
-    always @(posedge core_ref_clk)
-        if (prev_tx_state != tx) begin
-            $display("UART: TX changed to %d at", tx, $time);
-        end
+//    reg      prev_tx_state;
+//    always @(posedge core_ref_clk)
+//        prev_tx_state <= tx;
+//
+//    always @(posedge core_ref_clk)
+//        if (prev_tx_state != tx) begin
+//            $display("UART: TX changed to %d at", tx, $time);
+//        end
 
 endmodule // cmp_top
 

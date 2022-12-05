@@ -10,70 +10,8 @@ filesets:
             - openpiton::chip
             - openpiton::chipset
             - tool_vivado? (openpiton::xilinx_system_constraints)
+            - tool_quartus? (openpiton::intel_s10gx_ip)
         file_type: verilogSource-2001
-
-    s10gx:
-        files:
-            - ../intel/s10gx/system.tcl : {file_type : tclSource}
-            - ../intel/s10gx/system.sdc : {file_type : SDC}
-            - ../intel/s10gx/clk_mmcm.qsys : {file_type : QSYS}
-            - ../intel/s10gx/ip/clk_mmcm/clk_mmcm_clock_in.ip : {file_type : IP}
-            - ../intel/s10gx/uart.qsys : {file_type : QSYS}
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0.ip : {file_type : IP}
-            - ../intel/s10gx/ip/uart/uart_axi_bridge_0.ip : {file_type : IP}
-            - ../intel/s10gx/ip/uart/uart_clock_in.ip : {file_type : IP}
-            - ../intel/s10gx/ip/uart/uart_reset_in.ip : {file_type : IP}
-
-    s10gx_vcs_ip:
-        files:
-            - ../intel/s10gx/clk_mmcm/sim/clk_mmcm.v : {file_type : verilogSource}
-            - ../intel/s10gx/ip/clk_mmcm/clk_mmcm_clock_in/sim/clk_mmcm_clock_in.v : {file_type : verilogSource}
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/sim/uart_a_16550_uart_0.v : {file_type : verilogSource}
-            - ../intel/s10gx/ip/uart/uart_axi_bridge_0/sim/uart_axi_bridge_0.v : {file_type : verilogSource}
-            - ../intel/s10gx/ip/uart/uart_clock_in/sim/uart_clock_in.v : {file_type : verilogSource}
-            - ../intel/s10gx/ip/uart/uart_reset_in/sim/uart_reset_in.v : {file_type : verilogSource}
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altera_16550_uart.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_bit_timer.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_clkgen.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_csr.v
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_csrext.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_data_cnt.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_databuffer.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_dmaintf.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_fifo.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_fifomem.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_interrupt.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_modem.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_rx_shift.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_rx_sync.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_rxfc.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_rxfsm.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_rxin.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_rxstor.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_rxswfc.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_sync.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_tx_shift.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_txfc.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_txfsm.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_txout.sv
-            - ../intel/s10gx/ip/uart/uart_a_16550_uart_0/altera_16550_uart_1912/sim/synopsys/altr_uart_txstor.sv
-            - ../intel/s10gx/uart/sim/uart.v : {file_type : verilogSource}
-            - ../intel/s10gx/uart/altera_avalon_sc_fifo_1931/sim/uart_altera_avalon_sc_fifo_1931_vhmcgqy.v : {file_type : verilogSource}
-            - ../intel/s10gx/uart/altera_merlin_axi_master_ni_1940/sim/altera_merlin_address_alignment.sv : {file_type : verilogSource}
-            - ../intel/s10gx/uart/altera_merlin_axi_master_ni_1940/sim/uart_altera_merlin_axi_master_ni_1940_xmlitzq.sv : {file_type : verilogSource}
-            - ../intel/s10gx/uart/altera_merlin_demultiplexer_1921/sim/uart_altera_merlin_demultiplexer_1921_ekfzhji.sv : {file_type : verilogSource}
-            - ../intel/s10gx/uart/altera_merlin_demultiplexer_1921/sim/uart_altera_merlin_demultiplexer_1921_xu5xrea.sv : {file_type : verilogSource}
-            - ../intel/s10gx/uart/altera_merlin_multiplexer_1921/sim/altera_merlin_arbitrator.sv : {file_type : verilogSource}
-            - ../intel/s10gx/uart/altera_merlin_multiplexer_1921/sim/uart_altera_merlin_multiplexer_1921_cz47psq.sv : {file_type : verilogSource}
-            - ../intel/s10gx/uart/altera_merlin_multiplexer_1921/sim/uart_altera_merlin_multiplexer_1921_qjqmo2a.sv : {file_type : verilogSource}
-            - ../intel/s10gx/uart/altera_merlin_router_1921/sim/uart_altera_merlin_router_1921_wu6uqgi.sv : {file_type : verilogSource}
-            - ../intel/s10gx/uart/altera_merlin_router_1921/sim/uart_altera_merlin_router_1921_zjyjhoa.sv : {file_type : verilogSource}
-            - ../intel/s10gx/uart/altera_merlin_slave_agent_191/sim/altera_merlin_burst_uncompressor.sv : {file_type : verilogSource}
-            - ../intel/s10gx/uart/altera_merlin_slave_agent_191/sim/uart_altera_merlin_slave_agent_191_ncfkfri.sv : {file_type : verilogSource}
-            - ../intel/s10gx/uart/altera_merlin_slave_translator_191/sim/uart_altera_merlin_slave_translator_191_x56fcki.sv : {file_type : verilogSource}
-            - ../intel/s10gx/uart/altera_mm_interconnect_1920/sim/uart_altera_mm_interconnect_1920_ppouvcq.v : {file_type : verilogSource}
-            - ../intel/s10gx/uart/altera_reset_controller_1921/sim/altera_reset_controller.v : {file_type : verilogSource}
-            - ../intel/s10gx/uart/altera_reset_controller_1921/sim/altera_reset_synchronizer.v : {file_type : verilogSource}
 
 targets:
     default:
@@ -183,27 +121,11 @@ targets:
         description: Intel Stratix 10 GX Development Kit
         filesets:
           - rtl
-          - tool_quartus? (s10gx)
-          - tool_vcs? (s10gx_vcs_ip)
         toplevel: [system]
         tools:
           quartus:
             family : Stratix 10
             device : 1SG280LU2F50E2VG
-          vcs:
-              vcs_options:
-                  - -Wl,--no-as-needed
-                  - +nospecify
-                  - -Xstrict=1
-                  - -notice
-                  - -timescale=1ps/1ps
-                  - +rad
-                  - -sverilog
-                  - +systemverilogext+.sv
-                  - -ntb_opts uvm-1.1 +vpi
-                  - +lint=all,noVCDE,noVNGS,noPCTIO-L,noPCTIO
-                  - +warn=all
-                  - -l compile.log
         parameters:
             - NO_SCAN=true
             - FPGA_SYN=true
@@ -229,6 +151,7 @@ targets:
             - PITON_UART16550=true
             - PITON_FPGA_BRAM_BOOT=true
             - PITONSYS_NO_MC=true
+            - L2_SEND_NC_REQ=true
 
 parameters:
     NO_SCAN:
@@ -314,6 +237,9 @@ parameters:
         datatype: bool
         paramtype: vlogdefine
     PITON_FPGA_ETHERNETLITE:
+        datatype: bool
+        paramtype: vlogdefine
+    L2_SEND_NC_REQ:
         datatype: bool
         paramtype: vlogdefine
     GENESYS2_BOARD:

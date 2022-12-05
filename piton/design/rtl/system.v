@@ -562,6 +562,7 @@ assign rtc = rtc_div[6];
 assign uart_rts = 1'b0;
 `endif // VCU118_BOARD
 
+`ifndef INTEL_S10GX_BOARD
 // Different reset active levels for different boards
 always @ *
 begin
@@ -569,8 +570,20 @@ begin
     sys_rst_n_rect = ~sys_rst_n;
 `else // ifndef PITON_FPGA_RST_ACT_HIGH
     sys_rst_n_rect = sys_rst_n;
-`endif
 end
+`endif
+`else // ifdef INTEL_S10GX_BOARD
+wire ninit_done;
+
+always @ *
+begin
+    sys_rst_n_rect = sys_rst_n & ~ninit_done;
+end
+
+reset_release reset_release (
+    .ninit_done_reset (ninit_done)  //  output,  width = 1, ninit_done.reset
+);
+`endif // ifndef INTEL_S10GX_BOARD
 
 // Resets combinational logic
 // All modules have their own internal
