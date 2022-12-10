@@ -389,21 +389,18 @@ module system(
     input  [3:0]                                sw,
 `elsif INTEL_S10GX_BOARD
     // we only have 4 gpio dip switches on this board
-    input  [3:0]                                sw
+    input  [3:0]                                sw,
 `elsif XUPP3R_BOARD
     // no switches :(
 `else
     input  [7:0]                                sw,
 `endif
 
-`ifndef INTEL_S10GX_BOARD
 `ifdef XUPP3R_BOARD
     output [3:0]                                leds
 `else 
     output [7:0]                                leds
 `endif
-
-`endif // ifndef INTEL_S10GX_BOARD
 );
 
 ///////////////////////
