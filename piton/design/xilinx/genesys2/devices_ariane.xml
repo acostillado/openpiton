@@ -26,12 +26,6 @@ Description: Peripheral address map for OpenPiton+Ariane configurations.
         <length>0x40000000</length>
     </port>
     <port>
-        <name>iob</name>
-        <base>0x9f00000000</base>
-        <length>0x10</length>
-        <noc2in/>
-    </port>
-    <port>
         <name>sd</name>
         <base>0xf000000000</base>
         <!-- Give it up to reset PC + 1 MB-->
@@ -42,7 +36,6 @@ Description: Peripheral address map for OpenPiton+Ariane configurations.
         <base>0xfff0c2c000</base>
         <!-- Just give it all the space up to the network device? -->
         <length>0xd4000</length>
-        <noc2in/>
         <stream_accessible/>
     </port>
     <port>

@@ -79,6 +79,8 @@ reg                             rw_conflict_r;
 wire                            ww_conflict;
 reg                             ww_conflict_r;
 
+reg [DATA_WIDTH-1:0] DOUTA_out_reg;
+
 /* renaming signals */
 assign read_enable_in    = CEA & (RDWENA == 1'b1);
 assign write_enable_in   = CEB & (RDWENB == 1'b0);
@@ -120,6 +122,8 @@ always @ * begin
     if (rw_conflict_r) begin
       DOUTA = bram_data_in_r;
     end
+  end else begin
+    DOUTA = DOUTA_out_reg;
   end
 end
 
@@ -143,6 +147,13 @@ always @(posedge MEMCLK) begin
 end
 // END BRAM
 
+always @(posedge MEMCLK) begin
+  if (~RESET_N) begin
+    DOUTA_out_reg <= {DATA_WIDTH{1'b0}};
+  end else begin
+    DOUTA_out_reg <= DOUTA;
+  end
+end
 
 /* BIST logic for resetting RAM content to 0s on reset*/
 localparam INIT_STATE = 1'd0;

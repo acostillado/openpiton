@@ -889,34 +889,34 @@ assign ciop_iob_rst_n = io_ctrl_rst_n & test_start & ~piton_ready_n;
 assign ciop_iob_rst_n = io_ctrl_rst_n;
 `endif // INTEL_S10GX_BOARD
 
-ciop_iob ciop_iob     (
-    .chip_clk        ( chipset_clk           ),
-    .fpga_clk        ( chipset_clk           ),
-    .rst_n           ( ciop_iob_rst_n        ),
-
-    .noc1_in_val     ( intf_chipset_val_noc1 ),
-    .noc1_in_data    ( intf_chipset_data_noc1),
-    .noc1_in_rdy     ( intf_chipset_rdy_noc1 ),
-
-    .noc2_out_val    ( iob_filter_noc2_valid ),
-    .noc2_out_data   ( iob_filter_noc2_data  ),
-    .noc2_out_rdy    ( filter_iob_noc2_ready ),
-
-    .noc3_in_val     ( filter_iob_noc3_valid ),
-    .noc3_in_data    ( filter_iob_noc3_data  ),
-    .noc3_in_rdy     ( iob_filter_noc3_ready ),
-
-    .noc2_in_val     ( buf_iob_noc2_valid    ),
-    .noc2_in_data    ( buf_iob_noc2_data     ),
-    .noc2_in_rdy     ( iob_buf_noc2_ready    ),
-
-    .noc3_out_val    ( iob_buf_noc3_valid    ),
-    .noc3_out_data   ( iob_buf_noc3_data     ),
-    .noc3_out_rdy    ( buf_iob_noc3_ready    ),
-
-    .uart_interrupt ( uart_interrupt         ),
-    .net_interrupt  ( net_interrupt          )
-);
+//ciop_iob ciop_iob     (
+//    .chip_clk        ( chipset_clk           ),
+//    .fpga_clk        ( chipset_clk           ),
+//    .rst_n           ( ciop_iob_rst_n        ),
+//
+//    .noc1_in_val     ( intf_chipset_val_noc1 ),
+//    .noc1_in_data    ( intf_chipset_data_noc1),
+//    .noc1_in_rdy     ( intf_chipset_rdy_noc1 ),
+//
+//    .noc2_out_val    ( iob_filter_noc2_valid ),
+//    .noc2_out_data   ( iob_filter_noc2_data  ),
+//    .noc2_out_rdy    ( filter_iob_noc2_ready ),
+//
+//    .noc3_in_val     ( filter_iob_noc3_valid ),
+//    .noc3_in_data    ( filter_iob_noc3_data  ),
+//    .noc3_in_rdy     ( iob_filter_noc3_ready ),
+//
+//    .noc2_in_val     ( buf_iob_noc2_valid    ),
+//    .noc2_in_data    ( buf_iob_noc2_data     ),
+//    .noc2_in_rdy     ( iob_buf_noc2_ready    ),
+//
+//    .noc3_out_val    ( iob_buf_noc3_valid    ),
+//    .noc3_out_data   ( iob_buf_noc3_data     ),
+//    .noc3_out_rdy    ( buf_iob_noc3_ready    ),
+//
+//    .uart_interrupt ( uart_interrupt         ),
+//    .net_interrupt  ( net_interrupt          )
+//);
 
 
 `ifdef PITONSYS_UART
