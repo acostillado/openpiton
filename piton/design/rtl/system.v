@@ -537,7 +537,7 @@ wire  [`PITON_NUM_TILES*2-1:0] irq;         // level sensitive IR lines, mip & s
  // divide by 128
 reg [6:0] rtc_div;
 
-always @(posedge core_ref_clk or negedge chip_rst_n) begin : p_rtc_div
+always @(posedge core_ref_clk) begin : p_rtc_div
   if(~chip_rst_n) begin
     rtc_div <= 7'h0;
   end else begin
@@ -594,6 +594,9 @@ begin
 `ifdef PITONSYS_UART_RESET
     chip_rst_n = chip_rst_n & uart_rst_out_n;
 `endif
+`ifdef INTEL_S10GX_BOARD
+    chip_rst_n = passthru_chip_rst_n;
+`endif
 
 `ifdef PITON_NO_JTAG
     jtag_rst_n_full = passthru_jtag_rst_n;
@@ -614,13 +617,15 @@ begin
     // part of system).  Current boards supported
     // for passthru only use active low, so it always
     // expects active low
-    chipset_rst_n = sys_rst_n;
+    chipset_rst_n = sys_rst_n_rect;
 end
 
 // If there is no passthru, we need to set the resets
 // it controls
 `ifndef PITONSYS_INC_PASSTHRU
+`ifndef INTEL_S10GX_BOARD
 assign passthru_chip_rst_n = 1'b1;
+`endif
 assign passthru_jtag_rst_n = 1'b1;
 assign passthru_pll_rst_n = 1'b1;
 `endif
@@ -977,6 +982,10 @@ chipset chipset(
 
     // Chipset reset
     .rst_n(chipset_rst_n),
+
+`ifdef INTEL_S10GX_BOARD
+    .chip_rst_n(passthru_chip_rst_n),
+`endif // INTEL_S10GX_BOARD
 
     // In the case of passthru, it should
     // tell us when Piton is ready since it

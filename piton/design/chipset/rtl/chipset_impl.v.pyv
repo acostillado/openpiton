@@ -883,16 +883,16 @@ wire uart_interrupt;
 `ifdef PITONSYS_IOCTRL
 
 wire ciop_iob_rst_n;
-`ifndef INTEL_S10GX_BOARD
 assign ciop_iob_rst_n = io_ctrl_rst_n & test_start & ~piton_ready_n;
-`else // ifdef INTEL_S10GX_BOARD
-assign ciop_iob_rst_n = io_ctrl_rst_n;
-`endif // INTEL_S10GX_BOARD
 
 //ciop_iob ciop_iob     (
 //    .chip_clk        ( chipset_clk           ),
 //    .fpga_clk        ( chipset_clk           ),
+//`ifndef INTEL_S10GX_BOARD
 //    .rst_n           ( ciop_iob_rst_n        ),
+//`else // ifdef INTEL_S10GX_BOARD
+//    .rst_n           ( chipset_rst_n        ),
+//`endif // INTEL_S10GX_BOARD
 //
 //    .noc1_in_val     ( intf_chipset_val_noc1 ),
 //    .noc1_in_data    ( intf_chipset_data_noc1),

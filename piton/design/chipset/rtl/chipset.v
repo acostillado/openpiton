@@ -148,6 +148,10 @@ module chipset(
     output                                      pll_rst_n,
 `endif
 
+`ifdef INTEL_S10GX_BOARD
+    output                                      chip_rst_n,
+`endif
+
     // Piton ready input
 `ifndef PITON_BOARD
     input                                       piton_ready_n,
@@ -913,6 +917,7 @@ end
 	);
         assign clk_locked = 1'b1;
         assign init_calib_complete = 1'b1;
+	assign chip_rst_n = chipset_rst_n_ff;
     `endif // INTEL_S10GX_BOARD
 `endif // PITON_BOARD
 
