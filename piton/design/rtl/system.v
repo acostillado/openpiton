@@ -535,13 +535,13 @@ wire  [`PITON_NUM_TILES*2-1:0] irq;         // level sensitive IR lines, mip & s
 
  // no RTC at the moment, have to derive it from the system clock
  // divide by 128
-reg [6:0] rtc_div;
+reg [9:0] rtc_div;
 
 always @(posedge core_ref_clk) begin : p_rtc_div
   if(~chip_rst_n) begin
-    rtc_div <= 7'h0;
+    rtc_div <= 10'h0;
   end else begin
-    rtc_div <= rtc_div + 7'h1;
+    rtc_div <= rtc_div + 10'h1;
   end
 end
 
@@ -1238,6 +1238,7 @@ chipset chipset(
     .tdo_oe_o                       (                            ),
     //CLINT
     .rtc_i                          ( rtc                        ), // Real-time clock in (usually 32.768 kHz)
+    .rtc_led                        ( rtc[9]                     ),
     .timer_irq_o                    ( timer_irq                  ), // Timer interrupts
     .ipi_o                          ( ipi                        ), // software interrupt (a.k.a inter-process-interrupt)
     // PLIC
