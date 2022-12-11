@@ -1238,7 +1238,7 @@ chipset chipset(
     .tdo_oe_o                       (                            ),
     //CLINT
     .rtc_i                          ( rtc                        ), // Real-time clock in (usually 32.768 kHz)
-    .rtc_led                        ( rtc[9]                     ),
+    .rtc_led                        ( rtc_div[9]                     ),
     .timer_irq_o                    ( timer_irq                  ), // Timer interrupts
     .ipi_o                          ( ipi                        ), // software interrupt (a.k.a inter-process-interrupt)
     // PLIC
