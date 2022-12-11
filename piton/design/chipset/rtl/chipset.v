@@ -496,6 +496,7 @@ module chipset(
     output                                      tdo_oe_o,
     // CLINT
     input                                       rtc_i,         // Real-time clock in (usually 32.768 kHz)
+    input                                       rtc_led,
     output  [`PITON_NUM_TILES-1:0]                    timer_irq_o,   // Timer interrupts
     output  [`PITON_NUM_TILES-1:0]                    ipi_o,         // software interrupt (a.k.a inter-process-interrupt)
     // PLIC
@@ -819,7 +820,7 @@ end
     assign leds[2] = init_calib_complete;
     assign leds[3] = processor_offchip_noc2_valid;
     assign leds[4] = offchip_processor_noc3_valid;
-    assign leds[5] = 1'b0;
+    assign leds[5] = rtc_led;
     assign leds[6] = invalid_access;
     `ifdef PITONSYS_IOCTRL
         `ifdef PITONSYS_UART
