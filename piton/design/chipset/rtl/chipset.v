@@ -814,14 +814,19 @@ end
     assign leds[1] = init_calib_complete;
     assign leds[2] = processor_offchip_noc2_valid;
     assign leds[3] = offchip_processor_noc3_valid;
+`elsif INTEL_S10GX_BOARD
+    assign leds[0] = chip_rst_n;
+    assign leds[1] = uart_rx;
+    assign leds[2] = uart_tx;
+    assign leds[3] = rtc_led;
 `else   // PITON_BOARD
-    assign leds[0] = clk_locked;
-    assign leds[1] = ~piton_ready_n;
-    assign leds[2] = init_calib_complete;
-    assign leds[3] = processor_offchip_noc2_valid;
-    assign leds[4] = offchip_processor_noc3_valid;
+    assign leds[0] = chip_rst_n;
+    assign leds[1] = uart_rx;
+    assign leds[2] = uart_tx;
+    assign leds[3] = 1'b0;
+    assign leds[4] = 1'b0;
     assign leds[5] = rtc_led;
-    assign leds[6] = invalid_access;
+    assign leds[6] = 1'b0;
     `ifdef PITONSYS_IOCTRL
         `ifdef PITONSYS_UART
             `ifdef PITONSYS_UART_BOOT

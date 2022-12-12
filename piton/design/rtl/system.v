@@ -398,6 +398,8 @@ module system(
 
 `ifdef XUPP3R_BOARD
     output [3:0]                                leds
+`elsif INTEL_S10GX_BOARD
+    output [3:0]                                leds
 `else 
     output [7:0]                                leds
 `endif

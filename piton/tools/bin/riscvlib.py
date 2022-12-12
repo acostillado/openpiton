@@ -52,10 +52,10 @@ def get_bootrom_info(devices, nCpus, cpuFreq, timeBaseFreq, periphFreq, dtsPath,
 const char info[] = {
 "\\r\\n\\r\\n"
 "----------------------------------------\\r\\n"
-"--     OpenPiton+Ariane Platform      --\\r\\n"
+"-- OpenHW CORE-V CVA6 P-Mesh Cluster  --\\r\\n"
 "----------------------------------------\\r\\n"
 "OpenPiton Version: %s                   \\r\\n"
-"Ariane Version:    %s                   \\r\\n"
+"CVA6 Version:    %s                   \\r\\n"
 "                                        \\r\\n"
 "FPGA Board:        %s                   \\r\\n"
 "Build Date:        %s                   \\r\\n"

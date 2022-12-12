@@ -14,10 +14,10 @@ set_location_assignment PIN_B19 -to leds[0]
 set_location_assignment PIN_E17 -to leds[1]
 set_location_assignment PIN_D18 -to leds[2]
 set_location_assignment PIN_D19 -to leds[3]
-set_location_assignment PIN_B18 -to leds[4]
-set_location_assignment PIN_F17 -to leds[5]
-set_location_assignment PIN_E18 -to leds[6]
-set_location_assignment PIN_E19 -to leds[7]
+#set_location_assignment PIN_B18 -to leds[4]
+#set_location_assignment PIN_F17 -to leds[5]
+#set_location_assignment PIN_E18 -to leds[6]
+#set_location_assignment PIN_E19 -to leds[7]
 
 set_location_assignment PIN_AV13 -to uart_tx
 set_location_assignment PIN_BC11 -to uart_rx
@@ -38,10 +38,10 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to leds[0]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to leds[1]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to leds[2]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to leds[3]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to leds[4]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to leds[5]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to leds[6]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to leds[7]
+#set_instance_assignment -name IO_STANDARD "1.8 V" -to leds[4]
+#set_instance_assignment -name IO_STANDARD "1.8 V" -to leds[5]
+#set_instance_assignment -name IO_STANDARD "1.8 V" -to leds[6]
+#set_instance_assignment -name IO_STANDARD "1.8 V" -to leds[7]
 
 set_instance_assignment -name IO_STANDARD "1.8 V" -to uart_rx
 set_instance_assignment -name IO_STANDARD "1.8 V" -to uart_tx
