@@ -28,7 +28,7 @@
 # Not intended to be run standalone
 #
 
-set GLOBAL_INCLUDE_DIRS "${DV_ROOT}/design/include ${DV_ROOT}/design/chipset/include ${ARIANE_ROOT}/common/submodules/common_cells/include ${ARIANE_ROOT}/common/local/util ${ARIANE_ROOT}/corev_apu/register_interface/include"
+set GLOBAL_INCLUDE_DIRS "${DV_ROOT}/design/include ${DV_ROOT}/design/chip/tile/sparc/include ${DV_ROOT}/design/chipset/include ${ARIANE_ROOT}/common/submodules/common_cells/include ${ARIANE_ROOT}/common/local/util ${ARIANE_ROOT}/corev_apu/register_interface/include"
 
 # RTL include files
 set GLOBAL_INCLUDE_FILES [list \
@@ -39,7 +39,7 @@ set GLOBAL_INCLUDE_FILES [list \
     "${DV_ROOT}/design/include/l2.h" \
     "${DV_ROOT}/design/include/network_define.v" \
     "${DV_ROOT}/design/include/jtag.vh" \
-    "${DV_ROOT}/design/include/ifu.h" \
+    "${DV_ROOT}/design/chip/tile/sparc/include/ifu.h" \
     "${DV_ROOT}/design/include/lsu.h" \
     "${DV_ROOT}/design/chipset/include/chipset_define.vh" \
 ]
