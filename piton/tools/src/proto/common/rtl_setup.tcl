@@ -429,11 +429,12 @@ set CHIP_RTL_IMPL_FILES [list \
     "${ARIANE_ROOT}/common/submodules/common_cells/src/cdc_2phase.sv"                   \
     "${ARIANE_ROOT}/common/submodules/common_cells/src/unread.sv"                       \
     "${ARIANE_ROOT}/common/submodules/common_cells/src/popcount.sv"                     \
-    "${ARIANE_ROOT}/corev_apu/fpga-support/rtl/SyncSpRamBeNx64.sv"              \
     "${ARIANE_ROOT}/corev_apu/axi_mem_if/src/axi2mem.sv"                        \
-    "${ARIANE_ROOT}/corev_apu/src/tech_cells_generic/src/pulp_clock_gating.sv"      \
-    "${ARIANE_ROOT}/corev_apu/src/tech_cells_generic/src/cluster_clock_inverter.sv" \
-    "${ARIANE_ROOT}/corev_apu/src/tech_cells_generic/src/pulp_clock_mux2.sv"        \
+    "${ARIANE_ROOT}/corev_apu/src/tech_cells_generic/src/fpga/tc_clk_xilinx.sv"         \
+    "${ARIANE_ROOT}/corev_apu/src/tech_cells_generic/src/fpga/tc_sram_xilinx.sv"        \
+    "${ARIANE_ROOT}/corev_apu/src/tech_cells_generic/src/deprecated/cluster_clk_cells.sv" \
+    "${ARIANE_ROOT}/corev_apu/src/tech_cells_generic/src/deprecated/pulp_clk_cells.sv" \
+    "${ARIANE_ROOT}/common/local/util/tc_sram_xilinx_wrapper.sv"           \
     "${ARIANE_ROOT}/core/axi_adapter.sv"                                   \
     "${ARIANE_ROOT}/core/alu.sv"                                           \
     "${ARIANE_ROOT}/core/fpu_wrap.sv"                                      \
@@ -458,6 +459,7 @@ set CHIP_RTL_IMPL_FILES [list \
     "${ARIANE_ROOT}/core/issue_stage.sv"                                   \
     "${ARIANE_ROOT}/core/load_unit.sv"                                     \
     "${ARIANE_ROOT}/core/load_store_unit.sv"                               \
+    "${ARIANE_ROOT}/core/lsu_bypass.sv"                               \
     "${ARIANE_ROOT}/core/mmu_sv39/mmu.sv"                                           \
     "${ARIANE_ROOT}/core/mult.sv"                                          \
     "${ARIANE_ROOT}/core/multiplier.sv"                                    \
