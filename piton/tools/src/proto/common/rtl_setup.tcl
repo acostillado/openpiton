@@ -246,6 +246,8 @@ set CHIP_RTL_IMPL_FILES [list \
     "${DV_ROOT}/design/chip/tile/common/rtl/ucb_noflow.v" \
     "${DV_ROOT}/design/chip/tile/common/rtl/cluster_header.v" \
     "${DV_ROOT}/design/chip/tile/common/rtl/cluster_header_ctu.v" \
+    "${DV_ROOT}/design/chipset/meep_shell/sram_top.v" \
+    "${DV_ROOT}/design/chipset/meep_shell/openpiton_wrapper.v" \
     "${DV_ROOT}/design/chip/tile/pico/rtl/picorv32.v" \
     "${DV_ROOT}/design/chip/tile/pico/rtl/pico_reset.v" \
     "${DV_ROOT}/design/chip/tile/sparc/rtl/sparc.v" \

@@ -1,0 +1,12 @@
+EANAME=openpiton
+PCIE,yes,pcie_axi,1,PCIE_CLK,pcie_clk,pcie_rstn,dma,0
+DDR4,yes,mem_axi,1,DDR_CLK,0x0,mem_calib_complete,0,mc_clk
+HBM,no,mem_axi,1,CLK1,0x0,mem_calib_complete,00			
+AURORA,no,raw,<name>			
+UART,yes,uart_axi,1,CLK0,0x0,normal,uart_irq
+ETHERNET,no,eth_axi,1,CLK0,0x0,10Gb,eth_irq,pcie
+BROM,no,sram_axi,1,CLK0,0x0,initFile.mem
+BRAM,no,sram_axi,1,CLK0,0x0,none
+CLK0,100000000,chipset_clk
+GPIO,5,pcie_gpio,0x00
+ARST,LOW,ExtArstn

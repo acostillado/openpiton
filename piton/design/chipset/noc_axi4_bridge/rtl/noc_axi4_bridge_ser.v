@@ -1,3 +1,4 @@
+// Modified by Barcelona Supercomputing Center on March 3rd, 2022
 // ========== Copyright Header Begin ============================================
 // Copyright (c) 2019 Princeton University
 // All rights reserved.
@@ -72,6 +73,7 @@ assign flit_out_val = (state == SEND_HEADER) || (state == SEND_DATA);
 assign in_rdy = (state == ACCEPT);
 
 
+reg [`NOC_DATA_WIDTH-1:0] resp_header;
 always @(posedge clk) begin
   if(~rst_n) begin
     state <= ACCEPT;
@@ -102,7 +104,7 @@ always @(posedge clk) begin
       SEND_DATA: begin
         if (remaining_flits == `MSG_LENGTH_WIDTH'b1) begin
           state <= flit_out_rdy ? ACCEPT : SEND_DATA;
-          remaining_flits <= 0;
+          if (flit_out_rdy) remaining_flits <= 0; // bug fix: clearing should be conditional, Alex Kropotov (BSC)
         end
         else begin
           state <= SEND_DATA;
@@ -118,7 +120,6 @@ always @(posedge clk) begin
   end
 end
 
-reg [`NOC_DATA_WIDTH-1:0] resp_header;
 always @(posedge clk) begin
   if (~rst_n) begin
     resp_header <= `NOC_DATA_WIDTH'b0;
@@ -179,6 +180,11 @@ always @(posedge clk) begin
     endcase //state
   end
 end
+
+wire [`MSG_DST_CHIPID_WIDTH-1:0] resp_dst_chipid = resp_header[`MSG_DST_CHIPID];
+wire [`MSG_DST_X_WIDTH     -1:0] resp_dst_x      = resp_header[`MSG_DST_X];
+wire [`MSG_DST_Y_WIDTH     -1:0] resp_dst_y      = resp_header[`MSG_DST_Y];
+wire [`MSG_DST_FBITS_WIDTH -1:0] resp_dst_fbits  = resp_header[`MSG_DST_FBITS];
 
 always @(*) begin
   case (state)

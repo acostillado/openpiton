@@ -1,3 +1,4 @@
+# Modified by Barcelona Supercomputing Center on March 3rd, 2022
 # Copyright (c) 2016 Princeton University
 # All rights reserved.
 #
@@ -27,10 +28,36 @@
 # This script performs general actions
 # for creating a Vivado project
 #
-
 # Boiler plate startup
+
 set DV_ROOT $::env(DV_ROOT)
+set MEEP_ROOT $::env(MEEP_DIR)
+
 source $DV_ROOT/tools/src/proto/vivado/setup.tcl
+
+if { [info exists "::env(MEEP_SHELL)"] } {
+	
+	# Following lines could be in a separate tcl file
+	# Protosyn needs to run at least once to generate the files. Then it can finish
+	# -> after writing the file list and the defines list, so they can be processed later 
+	# -> by the MEEP Shell flow. 
+	# The MEEP Shell flow can then benefit of part of this tcl, which is parsing xci, vhd, 
+	# -> and verilog files. The shell needs in fact this kind of processing, leveraging from 
+	# -> a simple list.	
+	# This could be in a sourced script which checks the MEEP_SHELL environment variable:
+	# If it exists, it is protosyn. If not, is the MEEP_SHELL calling it
+	
+	#set ALL_RTL_IMPL_FILES [concat ${ALL_RTL_IMPL_FILES} ${MEEP_RTL_FILES}]
+	#set ALL_FILES [concat ${ALL_FILES} $MEEP_RTL_FILES{}]
+	
+	puts "MEEP DIR: $MEEP_ROOT\r\n"
+	
+	source $MEEP_ROOT/tcl/project_options.tcl
+
+puts "MEEP Shell protosyn flow completed"	
+exit
+} 
+
 
 # Create project
 create_project -force ${PROJECT_NAME} ${PROJECT_DIR}
@@ -77,6 +104,21 @@ foreach prj_file ${ALL_FILES} {
 }
 add_files -norecurse -fileset $fileset_obj $files_to_add
 
+#Generating IP cores for Alveo280 board
+if { $BOARD_DEFAULT_VERILOG_MACROS == "ALVEOU280_BOARD" } {
+
+  # Generating PCIe-based Shell (to save BD: write_bd_tcl -force ../piton/design/chipset/meep/meep_shell.tcl)
+  source $DV_ROOT/design/chipset/meep/meep_shell.tcl
+
+  # Generating Ethernet system
+  source $DV_ROOT/design/chipset/xilinx/alveou280/ip_cores/eth_cmac_syst/eth_cmac_syst.tcl
+  cr_bd_Eth_CMAC_syst ""
+  make_wrapper -files [get_files ${PROJECT_DIR}/../bd/Eth_CMAC_syst/Eth_CMAC_syst.bd] -top
+  add_files -norecurse           ${PROJECT_DIR}/../bd/Eth_CMAC_syst/hdl/Eth_CMAC_syst_wrapper.v
+  #Use this script to save BD after editing
+  # source $DV_ROOT/design/chipset/xilinx/alveou280/ip_cores/eth_cmac_syst/write_eth_syst_bd.tcl
+}
+
 # Set 'sources_1' fileset file properties for local files
 foreach inc_file $ALL_INCLUDE_FILES {
     if {[file exists $inc_file]} {
@@ -94,7 +136,7 @@ foreach inc_file $ALL_INCLUDE_FILES {
 foreach impl_file $ALL_RTL_IMPL_FILES {
     if {[file exists $impl_file]} {
         set file_obj [get_files -of_objects $fileset_obj [list "$impl_file"]]
-        if {[file extension $impl_file] == ".sv"} {
+        if { [file extension $impl_file] == ".sv"} {
           set_property "file_type" "SystemVerilog" $file_obj
         } else {
           set_property "file_type" "Verilog" $file_obj
@@ -107,6 +149,11 @@ foreach impl_file $ALL_RTL_IMPL_FILES {
         set_property "used_in_implementation" "1" $file_obj
         set_property "used_in_simulation" "1" $file_obj
         set_property "used_in_synthesis" "1" $file_obj
+       
+        # Outside the if else tree from above	
+        if {[file extension $impl_file] == ".vhd"} { 
+          set_property "file_type" "VHDL" $file_obj
+        }
     }
 }
 foreach coe_file $ALL_COE_FILES {
@@ -192,6 +239,14 @@ set_property "used_in_implementation" "1" $file_obj
 set_property "used_in_synthesis" "1" $file_obj
 
 
+add_files -fileset [get_filesets constrs_1] "$BOARD_DIR/hbm.xdc"
+add_files -fileset [get_filesets constrs_1] "$BOARD_DIR/ddr4.xdc"
+
+if { $env(ALVEO_ETH) eq "1"} {
+    add_files -fileset [get_filesets constrs_1] "$BOARD_DIR/ethernet.xdc"
+}
+
+
 # Set 'constrs_1' fileset properties
 set_property "name" "constrs_1" $fileset_obj
 set_property "target_constrs_file" "$constraints_file" $fileset_obj
@@ -242,7 +297,7 @@ if {[string equal [get_runs -quiet synth_1] ""]} {
   if {$VIVADO_FLOW_PERF_OPT} {
     set_property strategy "Flow_PerfOptimized_high" [get_runs synth_1]
   } else {
-    set_property strategy "Vivado Synthesis Defaults" [get_runs synth_1]
+    set_property strategy "Flow_AreaOptimized_high" [get_runs synth_1]
   }
   set_property flow "Vivado Synthesis $VIVADO_VERSION" [get_runs synth_1]
 }
@@ -256,7 +311,7 @@ set_property "srcset" "sources_1" $fileset_obj
 if {$VIVADO_FLOW_PERF_OPT} {
   set_property "strategy" "Flow_PerfOptimized_high" $fileset_obj
 } else {
-  set_property "strategy" "Vivado Synthesis Defaults" $fileset_obj
+  set_property "strategy" "Flow_AreaOptimized_high" $fileset_obj
 }
 
 set_property STEPS.SYNTH_DESIGN.ARGS.RETIMING true [get_runs synth_1]
@@ -286,7 +341,7 @@ if {[string equal [get_runs -quiet impl_1] ""]} {
   if {$VIVADO_FLOW_PERF_OPT} {
     set_property strategy "Performance_Explore" [get_runs impl_1]
   } else {
-    set_property strategy "Vivado Implementation Defaults" [get_runs impl_1]
+    set_property strategy "Performance_ExtraTimingOpt" [get_runs impl_1]
   }
   set_property flow "Vivado Implementation $VIVADO_VERSION" [get_runs impl_1]
 }
@@ -302,7 +357,7 @@ set_property "srcset" "sources_1" $fileset_obj
 if {$VIVADO_FLOW_PERF_OPT} {
   set_property "strategy" "Performance_Explore" $fileset_obj
 } else {
-  set_property "strategy" "Vivado Implementation Defaults" $fileset_obj
+  set_property "strategy" "Performance_ExtraTimingOpt" $fileset_obj
 }
 
 #set_property "incremental_checkpoint" "" $fileset_obj
@@ -364,6 +419,7 @@ set_property -name {steps.write_bitstream.args.more options} -value {} -objects 
 
 # set the current impl run
 current_run -implementation $fileset_obj
+
 
 puts "INFO: Project created:${PROJECT_NAME}"
 
