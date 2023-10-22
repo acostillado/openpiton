@@ -227,7 +227,7 @@ proc create_root_design { parentCell } {
    CONFIG.C0.DDR4_CasWriteLatency {12} \
    CONFIG.C0.DDR4_DataWidth {72} \
    CONFIG.C0.DDR4_EN_PARITY {true} \
-   CONFIG.C0.DDR4_InputClockPeriod {3331} \
+   CONFIG.C0.DDR4_InputClockPeriod {9996} \
    CONFIG.C0.DDR4_Mem_Add_Map {ROW_COLUMN_BANK_INTLV} \
    CONFIG.C0.DDR4_MemoryPart {MTA18ASF2G72PZ-2G3} \
    CONFIG.C0.DDR4_MemoryType {RDIMMs} \
